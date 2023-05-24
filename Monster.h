@@ -6,6 +6,7 @@
 
 using String = std::string;
 
+
 class Monster {
     //TO DO: need to add special defense 
     private:
@@ -32,6 +33,7 @@ class Monster {
             defense = maxDefense;
         }
 
+        //changer the old ability to a new one
         bool AddAbility(int numAbility, const Ability& ability){
             if(numAbility > 4 || numAbility < 1)
                 return false;
@@ -67,6 +69,9 @@ class Monster {
         }
         int GetDefense(){
             return defense;
+        }
+        String GetName(){
+            return monsterName;
         }
         void TakeDamge(int damge){
             health -= damge;

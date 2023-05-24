@@ -1,11 +1,14 @@
 #include <string>
-#include "Ability.h"
+#include "Ability.h" //use objcet Ability
 
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
 using String = std::string;
 
+/* Character object, uses Ability object to work.
+    simple object responsible to create new character.
+*/
 class Character {
     //TO DO: need to add special defense 
     private:
@@ -19,7 +22,21 @@ class Character {
     Ability ability4;
 
     public:
-        Character(int newHealth ,int newexperience ,int newlevel ,int newSpeed ,int newDefense,const String& newName){
+        //Empty constractor
+        Character(){
+            maxHealth = 0;
+            experience = 0;
+            level = 0;
+            MaxSpeed = 0;
+            maxDefense = 0;
+            characterName = "undefined";
+
+            health = maxHealth;
+            speed = MaxSpeed;
+            defense = maxDefense;
+        }
+
+        Character(const String& newName, int newHealth, int newSpeed, int newDefense, int newexperience, int newlevel){
             maxHealth = newHealth;
             experience = newexperience;
             level = newlevel;
@@ -32,6 +49,38 @@ class Character {
             defense = maxDefense;
         }
 
+        //constractor with abilitys, can get empty Ability class.
+         Character(const String& newName, int newHealth, int newSpeed, int newDefense, int newexperience, int newlevel,
+                    const Ability& newability1, const Ability& newability2, const Ability& newability3, const Ability& newability4){
+            maxHealth = newHealth;
+            experience = newexperience;
+            level = newlevel;
+            MaxSpeed = newSpeed;
+            maxDefense = newDefense;
+            characterName = newName;
+
+            health = maxHealth;
+            speed = MaxSpeed;
+            defense = maxDefense;
+
+
+            //cheack if the anilitys are valid
+            if(newability1.IsEmpty()){
+                ability1 = Ability(newability1);
+            }
+            if(newability2.IsEmpty()){
+                ability2 = Ability(newability2);
+            }
+            if(newability3.IsEmpty()){
+                ability3 = Ability(newability3);
+            }
+            if(newability4.IsEmpty()){
+                ability4 = Ability(newability4);
+            }
+        }
+
+
+        //change the old ability to a new one
         bool AddAbility(int numAbility, const Ability& ability){
             if(numAbility > 4 || numAbility < 1)
                 return false;
@@ -56,7 +105,7 @@ class Character {
 
             return false;
         }
-
+        
         int UseAbility(int numAbility){
             if(numAbility > 4 || numAbility < 1)
                 return 0;
@@ -77,16 +126,18 @@ class Character {
                 return UseAbilityHelper(ability4);
             }
 
-            return -1;
+            return -1;//on fail rerun -1
         }
 
+        //chack if uses left and return the ability power
         int UseAbilityHelper(Ability ability){
             if(ability.LowerUses())
                 return ability.GetPower();
-            else
-                return 0;
+
+            return 0;
         }
 
+        //simple attribute returns
         int GetHealth(){
             return health;
         }
@@ -95,6 +146,15 @@ class Character {
         }
         int GetDefense(){
             return defense;
+        }
+        int GetExperience(){
+            return experience;
+        }
+        int GetLevel(){
+            return level;
+        }
+        String GetName(){
+            return characterName;
         }
 
 
