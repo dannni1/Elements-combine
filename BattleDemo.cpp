@@ -186,9 +186,9 @@ int main(){
 
 
         if(holds_alternative<Monster*>(turnOrder[turn])){//cheack if its a Monster or character
-            cout << "Monster: " << name << " is atking you!!";
+            cout << "Monster: " << name << " is atking you!!\n";
         }else{
-            cout << "This: " << name << " turn pick a ability (1 or 2)\n";
+            cout << "This: " << name << " turn\n";
 
             int power = get<Character*>(turnOrder[turn])->UseAbility(PickAbility());//in short, use character ability 
             //cout << power << "test" << endl;
@@ -197,9 +197,8 @@ int main(){
                 X.TakeDamge(power);
                 cout << "you hit the Monster! with: " <<  power << " power\n";
             } else{
-                cout << "you OUT of uses, turn lost.";
-            }
-            
+                cout << "you OUT of uses, turn lost.\n";
+            }  
         }
 
         ++turn;
@@ -208,9 +207,6 @@ int main(){
     }
     
     cout << "GOOD JOB YOU WIN\n";
-    
-
-
     return 0;
 }
 
