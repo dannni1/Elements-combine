@@ -164,14 +164,14 @@ int main(){
     cout << "use your characters to defend your self\n";
 
 
-    //a way to store and sort objects 
-    vector<variant<Character*, Monster*>> turnOrder; //pointer vector (no memory is stored)
+    //a way to sort objects 
+    vector<variant<Character*, Monster*>> turnOrder; 
     turnOrder.push_back(&A);
     turnOrder.push_back(&B);
     turnOrder.push_back(&C);
     turnOrder.push_back(&X);
 
-    SortVector(turnOrder);//hell
+    SortVector(turnOrder);
 
     int turn = 0;
      while (true)
