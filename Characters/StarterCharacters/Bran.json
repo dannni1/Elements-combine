@@ -1,0 +1,8 @@
+{
+    "name": "Bran",
+    "defense": 1,
+    "health": 8,
+    "startattacks": ["earthquake", "rockthrow"],
+    "level": 1,
+    "experience":0
+}

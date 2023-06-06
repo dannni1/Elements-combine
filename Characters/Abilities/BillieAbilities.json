@@ -1,0 +1,12 @@
+{
+    "1":{
+        "name": "wattergun",
+        "power": 10,
+        "uses": 25
+    },
+    "2":{
+        "name": "watterfall",
+        "power": 40,
+        "uses": 4
+    }
+}

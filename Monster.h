@@ -1,10 +1,11 @@
-#include <string>
-#include "Ability.h"
-
 #ifndef MONSTER_H
 #define MONSTER_H
 
+#include <string>
+#include "Ability.h"
+
 using String = std::string;
+
 
 class Monster {
     //TO DO: need to add special defense 
@@ -32,6 +33,7 @@ class Monster {
             defense = maxDefense;
         }
 
+        //changer the old ability to a new one
         bool AddAbility(int numAbility, const Ability& ability){
             if(numAbility > 4 || numAbility < 1)
                 return false;
@@ -68,8 +70,12 @@ class Monster {
         int GetDefense(){
             return defense;
         }
+        String GetName(){
+            return monsterName;
+        }
         void TakeDamge(int damge){
-            health -= damge;
+            if((damge - defense) > 0)
+                health -= (damge - defense);
         }
         
 };
