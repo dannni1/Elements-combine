@@ -1,0 +1,8 @@
+{
+"name": "Abraham",
+"defense": 2,
+"health": 10,
+"startattacks": ["iceball", "icelance"],
+"level": 1,
+"experience":0
+}
