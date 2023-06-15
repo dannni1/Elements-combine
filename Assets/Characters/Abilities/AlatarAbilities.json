@@ -1,0 +1,12 @@
+{
+    "1":{
+        "name": "zap",
+        "power": 15,
+        "uses": 20
+    },
+    "2":{
+        "name": "lightning",
+        "power": 60,
+        "uses": 1
+    }
+}

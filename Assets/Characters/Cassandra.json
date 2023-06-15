@@ -1,0 +1,8 @@
+{
+    "name": "Cassandra",
+    "defense": 1,
+    "health": 15,
+    "startattacks": ["fireball", "firelance"],
+    "level": 1,
+    "experience":0
+}

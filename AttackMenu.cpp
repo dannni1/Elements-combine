@@ -59,9 +59,13 @@ void Menu2D::SetPosition(const float& X,const float& Y){
 
 void Menu2D::MoveUp(){
     if(selectedItemIndex_Y-1 >= 0){
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
-        selectedItemIndex_Y--;
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        if(!menu2D[selectedItemIndex_X][selectedItemIndex_Y-1].getString().isEmpty()){
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
+            selectedItemIndex_Y--;
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        } else{
+            //indicate on bad move (play sound or someing)
+        }
     }else{
         menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
         selectedItemIndex_Y = numberOfItems2D-1;
@@ -71,9 +75,13 @@ void Menu2D::MoveUp(){
 
 void Menu2D::MoveDown(){
     if(selectedItemIndex_Y+1 < numberOfItems2D){
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
-        selectedItemIndex_Y++;
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        if(!menu2D[selectedItemIndex_X][selectedItemIndex_Y+1].getString().isEmpty()){
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
+            selectedItemIndex_Y++;
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        } else{
+            //indicate on bad move (play sound or someing)
+        }
     }else{
         menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
         selectedItemIndex_Y = 0;
@@ -83,9 +91,13 @@ void Menu2D::MoveDown(){
 
 void Menu2D::MoveLeft(){
     if(selectedItemIndex_X-1 >= 0){
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
-        selectedItemIndex_X--;
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        if(!menu2D[selectedItemIndex_X-1][selectedItemIndex_Y].getString().isEmpty()){
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
+            selectedItemIndex_X--;
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        } else{
+            //indicate on bad move (play sound or someing)
+        }
     }else{
         menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
         selectedItemIndex_X = numberOfItems2D-1;
@@ -95,14 +107,17 @@ void Menu2D::MoveLeft(){
 
 void Menu2D::MoveRight(){
     if(selectedItemIndex_X+1 < numberOfItems2D){
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
-        selectedItemIndex_X++;
-        menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        if(!menu2D[selectedItemIndex_X+1][selectedItemIndex_Y].getString().isEmpty()){
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
+            selectedItemIndex_X++;
+            menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
+        } else{
+            //indicate on bad move (play sound or someing)
+        }
     }else{
         menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::White);
         selectedItemIndex_X = 0;
         menu2D[selectedItemIndex_X][selectedItemIndex_Y].setFillColor(sf::Color::Red);
     }
 }
-
 

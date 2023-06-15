@@ -14,178 +14,154 @@
 class Load
 {
 private:
-    bool LoadBackgrowndTexture(const std::string& folderPath, sf::Texture& bgTexture){
-        for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
-            if(entry.is_regular_file()){
-                if(bgTexture.loadFromFile(entry.path().string())){
-                    return true;
-                } else{
-                    std::cout << "fail to load: " << entry.path() << std::endl;
-                }
-            } else{
-                std::cout << "fail to load: " << entry.path() << std::endl;
-            }
-        }
-        return false;
-    }
-
-    bool LoadLeaderTexture(const std::string& folderPath, sf::Texture& LeaderTexture){
-        for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
-            if(entry.is_regular_file()){
-                if(LeaderTexture.loadFromFile(entry.path().string())){
-                    return true;
-                } else{
-                    std::cout << "fail to load: " << entry.path() << std::endl;
-                }
-            } else{
-                std::cout << "fail to load: " << entry.path() << std::endl;
-            }
-        }
-        return false;
-    }
-
-    //load all the monster images (for now)
-    bool LoadMonsterTexture(const std::string& folderPath, std::vector<sf::Texture>& monstersTexture){
-        bool fullLoad = true;
-
-        for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
-            if(entry.is_regular_file()){
-                sf::Texture texture;
-
-                if(texture.loadFromFile(entry.path().string())){
-                    monstersTexture.push_back(texture);
-                } else{
-                    std::cout << "fail to load: " << entry.path() << std::endl;
-                    fullLoad = false;
-                }
-                
-            } else{
-                std::cout << "fail to load: " << entry.path() << std::endl;
-                fullLoad = false;
-            }
-        }
-        return fullLoad;
-    }
-
-    //load all the characters images (for now)
-    bool LoadCharacterTexture(const std::string& folderPath, std::vector<sf::Texture>& charactersTexture){
-        bool fullLoad = true;
-
-        for(const auto& entry : std::filesystem::directory_iterator(folderPath)){
-            if(entry.is_regular_file()){
-                sf::Texture texture;
-
-                if(texture.loadFromFile(entry.path().string())){
-                    charactersTexture.push_back(texture);
-                } else{
-                    std::cout << "fail to load: " << entry.path() << std::endl;
-                    fullLoad = false;
-                }
-
-            } else{
-                std::cout << "fail to load: " << entry.path() << std::endl;
-                fullLoad = false;
-            }
-        }
-        return fullLoad;
-    }
-
-
-    
-
     //find the file and load it to json
-    nlohmann::json LoadFileJson(const std::string& fileName){
-    std::ifstream readFile(fileName);
-    if(readFile){
-        nlohmann::json data;
-        readFile >> data;
-        readFile.close();
+    bool LoadFileJson(const std::string& m_fileName, nlohmann::json& m_json){
+        std::ifstream readFile(m_fileName);
+        if(readFile){
+            readFile >> m_json;
+            readFile.close();
 
-        return data;
-    }   
+            return true;
+        }   
 
-    std::cout << "fail to load: " << fileName << std::endl;
-    return nlohmann::json(); //on fail retun empty  
+        std::cout << "fail to load: " << m_fileName << std::endl;
+        return false; //on fail  
+    }
+
+    //load a texture from file
+    bool LoadTextureFromfile(const std::string& m_filePath, sf::Texture& m_texture){
+        if(m_texture.loadFromFile(m_filePath)){
+            return true;
+        }
+        
+        std::cout << "fail to load Texture: " << m_filePath << std::endl;
+        return false;//on fail  
     }
 
     //create character and load it form file
-    Character LoadCharacter(const std::string& folderPathChracter){
-    //call file load
-    nlohmann::json jsonFile = LoadFileJson(folderPathChracter);
+    Character LoadChracterFromfile(const std::string& m_filePathChracter){
+        //call file load
+        nlohmann::json m_jsonFile;
+        if(!LoadFileJson(m_filePathChracter, m_jsonFile)){
+            std::cout << "Fail to load character: " << m_filePathChracter << std::endl;
+            return Character();//on fail retun empty 
+        }
 
-    if(!jsonFile.empty()){
-        Character loadedCharacter = Character(jsonFile["name"], jsonFile["health"], jsonFile["defense"],
-                                    jsonFile["experience"], jsonFile["level"]);
-    std::cout << "the character: " << jsonFile["name"] << " loaded successfuly.\n";
-    return loadedCharacter;
+        if(!m_jsonFile.empty()){
+            Character loadedCharacter = Character(m_jsonFile["name"], m_jsonFile["health"], m_jsonFile["defense"],
+                                        m_jsonFile["experience"], m_jsonFile["level"]);
+        std::cout << "the character: " << m_jsonFile["name"] << " loaded successfuly.\n";
+        return loadedCharacter;
+        }
+
+        std::cout << "Fail to load character: " << m_filePathChracter << std::endl;
+        return Character(); //on fail retun empty  
     }
 
-    return Character(); //on fail retun empty  
+
+    //overload load character with abilitys
+    Character LoadChracterFromfile(const std::string& m_filePathChracter, const std::string& m_filePathAbility){
+        //call file load
+        nlohmann::json m_jsonFileCharacter;
+        if(!LoadFileJson(m_filePathChracter, m_jsonFileCharacter)){
+            std::cout << "Fail to load character: " << m_filePathChracter << std::endl;
+            return Character();//on fail retun empty 
+        }
+
+        nlohmann::json m_jsonFileAbility;
+        if(!LoadFileJson(m_filePathAbility, m_jsonFileAbility)){
+            std::cout << "Fail to load character Abilitys: " << m_filePathAbility << std::endl;
+            return Character();//on fail retun empty 
+        }
+
+        Ability ability1 = m_jsonFileAbility.contains("1") ? Ability(m_jsonFileAbility["1"]["uses"], m_jsonFileAbility["1"]["power"], m_jsonFileAbility["1"]["name"]) :
+            Ability();
+
+        Ability ability2 = m_jsonFileAbility.contains("2") ? Ability(m_jsonFileAbility["2"]["uses"], m_jsonFileAbility["2"]["power"], m_jsonFileAbility["2"]["name"]) :
+            Ability();
+        
+        Ability ability3 = m_jsonFileAbility.contains("3") ? Ability(m_jsonFileAbility["3"]["uses"], m_jsonFileAbility["3"]["power"], m_jsonFileAbility["3"]["name"]) :
+            Ability();
+
+        Ability ability4 = m_jsonFileAbility.contains("4") ? Ability(m_jsonFileAbility["4"]["uses"], m_jsonFileAbility["4"]["power"], m_jsonFileAbility["4"]["name"]) :
+            Ability();
+
+        Character loadedCharacter = Character(m_jsonFileCharacter["name"], m_jsonFileCharacter["health"], m_jsonFileCharacter["defense"],
+                                    m_jsonFileCharacter["experience"], m_jsonFileCharacter["level"], ability1, ability2, ability3, ability4);
+        std::cout << "the character: " << m_jsonFileCharacter["name"] << " loaded successfuly.\n";
+        return loadedCharacter;
     }
 
-    //overload create lvl 1 character and load it form file with abilitys
-    Character LoadCharacter(const std::string& folderPathChracter, const std::string& folderPathAbility){
-    //call file load
-    nlohmann::json jsonFileCharacter = LoadFileJson(folderPathChracter);
-    nlohmann::json jsonFileAbility = LoadFileJson(folderPathAbility);
-    
-    if(jsonFileCharacter.empty() || jsonFileAbility.empty())
-        return Character();//on fail retun empty  
 
-    Ability ability1(jsonFileAbility["1"]["uses"], jsonFileAbility["1"]["power"], jsonFileAbility["1"]["name"]);
-    Ability ability2(jsonFileAbility["2"]["uses"], jsonFileAbility["2"]["power"], jsonFileAbility["2"]["name"]);
+    //overload load character with abilitys and textures
+    Character LoadChracterFromfile(const std::string& m_filePathChracter, const std::string& m_filePathAbility,
+                                const std::string& m_filePathTexture){
 
-    Ability ability3;
-    Ability ability4;
+        nlohmann::json m_jsonFileCharacter;
+        if(!LoadFileJson(m_filePathChracter, m_jsonFileCharacter)){
+            std::cout << "Fail to load character: " << m_filePathChracter << std::endl;
+            return Character();//on fail retun empty 
+        }
 
-    Character loadedCharacter = Character(jsonFileCharacter["name"], jsonFileCharacter["health"], jsonFileCharacter["defense"],
-                                jsonFileCharacter["experience"], jsonFileCharacter["level"], ability1, ability2, ability3, ability4);
-    std::cout << "the character: " << jsonFileCharacter["name"] << " loaded successfuly.\n";
-    return loadedCharacter;
-}
+        nlohmann::json m_jsonFileAbility;
+        if(!LoadFileJson(m_filePathAbility, m_jsonFileAbility)){
+            std::cout << "Fail to load character Abilitys: " << m_filePathAbility << std::endl;
+            return Character();//on fail retun empty 
+        }
+
+        Ability ability1 = m_jsonFileAbility.contains("1") ? Ability(m_jsonFileAbility["1"]["uses"], m_jsonFileAbility["1"]["power"], m_jsonFileAbility["1"]["name"]) :
+            Ability();
+
+        Ability ability2 = m_jsonFileAbility.contains("2") ? Ability(m_jsonFileAbility["2"]["uses"], m_jsonFileAbility["2"]["power"], m_jsonFileAbility["2"]["name"]) :
+            Ability();
+        
+        Ability ability3 = m_jsonFileAbility.contains("3") ? Ability(m_jsonFileAbility["3"]["uses"], m_jsonFileAbility["3"]["power"], m_jsonFileAbility["3"]["name"]) :
+            Ability();
+
+        Ability ability4 = m_jsonFileAbility.contains("4") ? Ability(m_jsonFileAbility["4"]["uses"], m_jsonFileAbility["4"]["power"], m_jsonFileAbility["4"]["name"]) :
+            Ability();
+
+        sf::Texture m_texture;
+        if(!LoadTextureFromfile(m_filePathTexture, m_texture)){
+            std::cout << "Fail to load character Texture: " << m_filePathTexture << std::endl;
+            return Character();//on fail retun empty 
+        }
+
+        Character loadedCharacter = Character(m_jsonFileCharacter["name"], m_jsonFileCharacter["health"], m_jsonFileCharacter["defense"],
+                                    m_jsonFileCharacter["experience"], m_jsonFileCharacter["level"], ability1, ability2, ability3, ability4, m_texture);
+
+        std::cout << "the character: " << m_jsonFileCharacter["name"] << " loaded successfuly.\n";
+        return loadedCharacter;
+    }
 //end of privete
 
 
 public:
-    //load all the images from the images folder. give back a vector of the multi  load. 
-    void LoadTexureFromFolder(const std::string& folderPath, std::vector<sf::Texture>& monstersTexture, std::vector<sf::Texture>& charactersTexture,
-                            sf::Texture& bgTexture, sf::Texture& leaderTexture){
+    sf::Texture LoadTexture(const std::string& m_filePathTexter, sf::Texture& m_texture){
+        if(LoadTextureFromfile(m_filePathTexter, m_texture))
+            return m_texture;
 
-    std::string bgPath = folderPath + "Levels/";
-    if(LoadBackgrowndTexture(bgPath, bgTexture))
-        std::cout << "the background texture loaded successfully.\n";
-    else   
-        std::cout << "the background texture faild to load.\n";
-
-    std::string leaderPath = folderPath + "Leader/";
-    if(LoadLeaderTexture(leaderPath, leaderTexture))
-        std::cout << "the Leader character texture loaded successfully.\n";
-    else   
-        std::cout << "the Leader character texture faild to load.\n";
-        
-    std::string monsterPath = folderPath + "Monsters/";
-    if(LoadMonsterTexture(monsterPath, monstersTexture))
-        std::cout << "the monster texture loaded successfully.\n";
-    else   
-        std::cout << "the monster texture faild to load.\n";
-
-    std::string characterPath = folderPath + "Characters/";
-    if(LoadCharacterTexture(characterPath, charactersTexture))
-        std::cout << "the characters  texture loaded successfully.\n";
-    else   
-        std::cout << "the characters texture faild to load.\n";
+        return m_texture;//fail
     }
 
     //give character no abilitys
-    Character LoadChracterFromFolder(const std::string& folderPathChracter){
-        Character character = LoadCharacter(folderPathChracter);
+    Character LoadChracter(const std::string& m_filePathChracter){
+        Character character = LoadChracterFromfile(m_filePathChracter);
         return character;
     }
 
     //overload character with abilitys
-    Character LoadChracterFromFolder(const std::string& folderPathChracter, const std::string& folderPathAbility){
-        Character character = LoadCharacter(folderPathChracter, folderPathAbility);
+    Character LoadChracter(const std::string& m_filePathChracter, const std::string& m_filePathAbility){
+        Character character = LoadChracterFromfile(m_filePathChracter, m_filePathAbility);
+        return character;
+    } 
+
+    //overload character with abilitys and texture 
+    Character LoadChracter(const std::string& m_filePathChracter, const std::string& m_filePathAbility,
+                                        const std::string& m_filePathTexter){
+        Character character = LoadChracterFromfile(m_filePathChracter, m_filePathAbility, m_filePathTexter);
         return character;
     }
+
 };
 #endif

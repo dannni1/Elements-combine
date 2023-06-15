@@ -1,82 +1,117 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
+#include <SFML/Graphics.hpp> //need SFML package
 #include <string>
-#include "Ability.h"
 
-using String = std::string;
+#include "Ability.h"
 
 
 class Monster {
     //TO DO: need to add special defense 
     private:
-    int maxHealth, experience, level, MaxSpeed, maxDefense;
-    int health, speed, defense;
-    String monsterName;
+    int c_maxHealth, c_level, c_maxDefense; //c for class
+    int c_health, c_defense;
+    std::string c_monsterName;
 
-    Ability ability1;
-    Ability ability2;
-    Ability ability3;
-    Ability ability4;
+    
+    sf::Texture c_monsterTexture;
+    sf::Sprite* c_monster_ptrSprite;
+
+    //chack if uses left and return the ability power
+    int UseAbilityHelper(Ability ability){
+        if(ability.LowerUses())
+            return ability.GetPower();
+
+        return 0;
+    }
 
     public:
-        Monster(int newHealth ,int newexperience ,int newlevel ,int newSpeed ,int newDefense,const String& newName){
-            maxHealth = newHealth;
-            experience = newexperience;
-            level = newlevel;
-            MaxSpeed = newSpeed;
-            maxDefense = newDefense;
-            monsterName = newName;
+        //Empty constractor
+        Monster(){
+            c_maxHealth = -1;
+            c_level = -1;
+            c_maxDefense = -1;
+            c_monsterName = "";
 
-            health = maxHealth;
-            speed = MaxSpeed;
-            defense = maxDefense;
+            c_health = c_maxHealth;
+            c_defense = c_maxDefense;
         }
 
-        //changer the old ability to a new one
-        bool AddAbility(int numAbility, const Ability& ability){
-            if(numAbility > 4 || numAbility < 1)
-                return false;
-            if(numAbility == 1){
-                Ability ability1 = Ability(ability);
-                return true;
-            }
-            if (numAbility == 2)
-            {
-                Ability ability2 = Ability(ability);
-                return true;
-            }
-            if (numAbility == 3)
-            {
-                Ability ability3 = Ability(ability);
-                return true;
-            }
-            if (numAbility == 4)
-            {
-                Ability ability4 = Ability(ability);
-                return true;
-            }
+        //constractor 
+        Monster(const std::string& newName, int newHealth, int newDefense)
+        : c_maxHealth(newHealth), c_maxDefense(newDefense), c_monsterName(newName)
+        {
+            c_health = c_maxHealth;
+            c_defense = c_maxDefense;
+        }
+
+        //constractor with texture
+        Monster(const std::string& newName, int newHealth, int newDefense, sf::Texture newTexure)
+        : c_maxHealth(newHealth), c_maxDefense(newDefense), c_monsterName(newName), c_monsterTexture(newTexure)
+        {
+            c_health = c_maxHealth;
+            c_defense = c_maxDefense;
+        }
+
+        ~Monster(){}
+
+
+
+        //take damge and return the damge obj take 
+        int TakeDamge(const int m_damge){
+            int m_temp = m_damge - c_defense;
+            if(m_temp > 0)
+                c_health -= m_temp;
             
-
-            return false;
+            return m_temp;
         }
 
-        int GetHealth(){
-            return health;
+        
+        //simple attribute returns
+        int GetHealth() const{
+            return c_health;
         }
-        int GetSpeed(){
-            return speed;
+        int GetDefense() const{
+            return c_defense;
         }
-        int GetDefense(){
-            return defense;
+        int GetLevel() const{
+            return c_level;
         }
-        String GetName(){
-            return monsterName;
+        std::string GetName() const{
+            return c_monsterName;
         }
-        void TakeDamge(int damge){
-            if((damge - defense) > 0)
-                health -= (damge - defense);
+        //give a pointer to character texture
+        sf::Texture* GetTexture_ptr() {
+            sf::Texture* ptr = &c_monsterTexture;
+            return ptr;
         }
+        //give the character sprite pointer
+        sf::Sprite* GetSprite_ptr() const{
+            return c_monster_ptrSprite;
+        }
+
+        //simple set attribute
+        void SetHealth(int newHealth) {
+            c_health = newHealth;
+        }
+        void SetDefense(int newDefense) {
+             c_defense = newDefense;
+        }
+        void SetLevel(int newLevel) {
+            c_level = newLevel;
+        }
+        void SetName(const std::string& newName) {
+            c_monsterName.assign(newName);
+        }
+        /*void SetTexture(const sf::Texture newTexture) {
+            c_characterTexture = std::move(sf::Texture(newTexture));;
+        } ------------------- TOO EXPESIVE (bad for gpu)------------------------
+        */
+        void SetSprite_prt(sf::Sprite* newSprite_ptr) {
+            c_monster_ptrSprite = newSprite_ptr;
+        }
+
         
 };
 

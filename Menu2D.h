@@ -1,7 +1,7 @@
 #ifndef MENU2D_H
 #define MENU2D_H
 
-#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp> //need SFML package
 #include <string>
 
 class Menu2D
@@ -24,7 +24,7 @@ public:
     void MoveDown();
     void MoveLeft();
     void MoveRight();
-    //int GetPressedItem(){return selectedItemIndex;}
+    int GetSelectedItem(){return (selectedItemIndex_X + selectedItemIndex_Y + 1);} //starts from 0
 
 };
 

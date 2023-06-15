@@ -1,5 +1,5 @@
-#ifndef ATTACKMENU_H
-#define ATTACKMENU_H
+#ifndef ATTACK_MENU_H
+#define ATTACK_MENU_H
 
 #include <SFML/Graphics.hpp> //need SFML package
 #include <string>
@@ -7,37 +7,38 @@
 #include "Menu2D.h"
 #include "Character.h"
 
-//Attack menu loop
-void AttackMenu(sf::RenderWindow& window, Character& Character, sf::Sprite& characterSprite,
-                 sf::Sprite& bgSprite){
+//Attack menu loop (add monster)
+int AttackMenu(sf::RenderWindow& m_window, Character* m_character, 
+                 sf::Sprite& m_bgSprite){
     //box
     int m_boxSize_x = 400;
     int m_boxSize_y = 100;
     sf::RectangleShape m_Menu_Box(sf::Vector2f(m_boxSize_x, m_boxSize_y));
     m_Menu_Box.setFillColor(sf::Color::Black);
-    m_Menu_Box.setPosition(50, window.getSize().y - m_boxSize_y - 150);//offset
+    m_Menu_Box.setPosition(50, m_window.getSize().y - m_boxSize_y - 150);//offset
 
     //get names
     std::string arr[4];
-    for(int i = 1;i < 5; ++i){
-       arr[i-1] = Character.GetAbilityName(i);
-    }
+    for(int i = 1;i < 5; ++i)
+       arr[i-1] = m_character->GetAbilityName(i);
 
     //menu 
     Menu2D m_attackMenu(arr);
     m_attackMenu.SetPosition(m_Menu_Box.getPosition().x ,m_Menu_Box.getPosition().y);
 
-    characterSprite.setPosition(m_Menu_Box.getPosition().x + (m_boxSize_x/2) -50, m_Menu_Box.getPosition().y - 100);
+    sf::Sprite* m_characterSptite = m_character->GetSprite_ptr();
+
+    m_characterSptite->setPosition(m_Menu_Box.getPosition().x + (m_boxSize_x/2) -50, m_Menu_Box.getPosition().y - 100);
 
     while (true)
     {
 
         //Process events
         sf::Event event;
-        while (window.pollEvent(event)) //must be a loop
+        while (m_window.pollEvent(event)) //must be a loop
         {
             if (event.type == sf::Event::Closed)
-                window.close();
+                m_window.close();
             
             if(event.type == sf::Event::KeyReleased){
                 switch (event.key.code)
@@ -54,19 +55,22 @@ void AttackMenu(sf::RenderWindow& window, Character& Character, sf::Sprite& char
                 case sf::Keyboard::Right:
                     m_attackMenu.MoveRight();
                     break;
+                case sf::Keyboard::Enter:
+                    return m_attackMenu.GetSelectedItem(); //return
+                    break;
                 default:
                     break;
                 }
             }
         }
-        window.clear();
+        m_window.clear();
 
-        window.draw(bgSprite);
-        window.draw(m_Menu_Box);
-        m_attackMenu.Draw(window);
-        window.draw(characterSprite);
+        m_window.draw(m_bgSprite);
+        m_window.draw(m_Menu_Box);
+        m_attackMenu.Draw(m_window);
+        m_window.draw(*m_characterSptite);
         
-        window.display();
+        m_window.display();
     }                                
 }
 
