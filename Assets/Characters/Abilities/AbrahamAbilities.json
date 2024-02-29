@@ -1,0 +1,12 @@
+{
+    "1":{
+        "name": "iceball",
+        "power": 25,
+        "uses": 10
+    },
+    "2":{
+        "name": "icelance",
+        "power": 40,
+        "uses": 4
+    }
+}

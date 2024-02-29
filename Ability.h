@@ -23,15 +23,15 @@ class Ability{
             abilityName = "";
         }
 
-        Ability(int newNumOfUses, int newPower, const String& newName){
-            numOfUses = newNumOfUses;
-            power = newPower;
-            abilityName = newName;
-        }
+        Ability(int newNumOfUses, int newPower, const String& newName)
+        : numOfUses(newNumOfUses), power(newPower), abilityName(newName) {}
 
         //copy constructor 
         Ability(const  Ability& otherAbility) 
         : numOfUses(otherAbility.numOfUses), power(otherAbility.power), abilityName(otherAbility.abilityName) {}
+
+        ~Ability(){
+        }
 
 
         //check and lowers if you have any uses left

@@ -1,0 +1,8 @@
+{
+    "name": "Billie",
+    "defense": 2,
+    "health": 10,
+    "startattacks": ["wattergun", "watterfall"],
+    "level": 1,
+    "experience":0
+}

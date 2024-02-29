@@ -1,0 +1,12 @@
+{
+    "1":{
+        "name": "fireball",
+        "power": 25,
+        "uses": 10
+    },
+    "2":{
+        "name": "firelance",
+        "power": 40,
+        "uses": 4
+    }
+}

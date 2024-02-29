@@ -1,0 +1,12 @@
+{
+    "1":{
+        "name": "windslash",
+        "power": 25,
+        "uses": 10
+    },
+    "2":{
+        "name": "windblast",
+        "power": 40,
+        "uses": 4
+    }
+}
