@@ -1,0 +1,8 @@
+{
+    "name": "Elvin",
+    "defense": 1,
+    "health": 15,
+    "startattacks": ["windslash", "windblast"],
+    "level": 1,
+    "experience":0
+}

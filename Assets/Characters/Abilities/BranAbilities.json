@@ -1,0 +1,12 @@
+{
+    "1":{
+        "name": "earthquake",
+        "power": 60,
+        "uses": 1
+    },
+    "2":{
+        "name": "rockthrow",
+        "power": 15,
+        "uses": 20
+    }
+}

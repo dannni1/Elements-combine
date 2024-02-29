@@ -1,0 +1,8 @@
+{
+    "name": "Alatar",
+    "defense": 1,
+    "health": 8,
+    "startattacks": ["zap", "lightning"],
+    "level": 1,
+    "experience":0
+}
