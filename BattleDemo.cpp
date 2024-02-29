@@ -127,7 +127,7 @@ int main(){
             }
         }
         else{
-            cout << "good job troll\n";
+            cout << "fail\n";
             break;
         }
     }
